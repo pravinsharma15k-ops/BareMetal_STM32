@@ -87,4 +87,33 @@ Typical debugging workflow:
 arm-none-eabi-gdb final.elf
 ```
 
-Then connect GDB to the debug server
+Then connect GDB to the debug server and control the STM32 target.
+
+## 📚 Learning Goals
+
+This project is part of my learning journey in embedded systems and focuses on understanding STM32 at a low level rather than relying only on high-level frameworks.
+
+The main goal is to understand what happens between the C source code and the STM32 hardware.
+
+## 🚀 Future Improvements
+
+* Add more GPIO examples
+* Add timer peripherals
+* Add UART communication
+* Add interrupt handling
+* Add SysTick
+* Add ADC
+* Add SPI and I2C
+* Improve debugging workflow
+* Add more STM32 peripheral drivers
+
+##  Author
+
+**Pravin Sharma**
+
+B.Tech ECE Student
+Interested in Embedded Systems, STM32, Electronics and Low-Level Programming.
+
+---
+
+⭐ If you find this project useful, consider giving the repository a star.
