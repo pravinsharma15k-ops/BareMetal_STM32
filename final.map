@@ -1,0 +1,121 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00100000         rw
+SRAM             0x20000000         0x00020000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD main.o
+LOAD led.o
+LOAD stm32_startup.o
+
+.text           0x08000000      0x604
+ *(.isr_vector)
+ .isr_vector    0x08000000        0xc stm32_startup.o
+                0x08000000                vectors
+ *(.text)
+ .text          0x0800000c      0x4dc main.o
+                0x0800000c                main
+                0x0800003c                idle_task
+                0x08000044                task1_handler
+                0x08000068                task2_handler
+                0x0800008c                task3_handler
+                0x080000ac                task4_handler
+                0x080000cc                init_systick_timer
+                0x08000134                init_scheduler_stack
+                0x0800013e                init_tasks_stack
+                0x08000258                enable_processor_faults
+                0x08000294                get_psp_value
+                0x080002b4                save_psp_value
+                0x080002dc                update_next_task
+                0x08000364                switch_sp_to_psp
+                0x0800037e                schedule
+                0x080003a4                task_delay
+                0x08000404                PendSV_Handler
+                0x0800042a                update_global_tick_count
+                0x08000444                unblock_tasks
+                0x080004a4                SysTick_Handler
+                0x080004d0                HardFault_Handler
+                0x080004d8                MemManage_Handler
+                0x080004e0                BusFault_Handler
+ .text          0x080004e8       0xfc led.o
+                0x080004e8                delay
+                0x08000510                led_init_all
+                0x08000584                led_on
+                0x080005b4                led_off
+ .text          0x080005e4       0x14 stm32_startup.o
+                0x080005e4                NMI_Handler
+                0x080005e4                Default_Handler
+                0x080005ec                Reset_Handler
+ *(.rodata)
+ .rodata        0x080005f8        0x9 main.o
+                0x080005f8                const_v_1
+                0x080005fc                const_v_2
+                0x08000600                const_V_3
+                0x08000604                        . = ALIGN (0x4)
+ *fill*         0x08000601        0x3 
+                0x08000604                        _etext = .
+
+.glue_7         0x08000604        0x0
+ .glue_7        0x08000604        0x0 linker stubs
+
+.glue_7t        0x08000604        0x0
+ .glue_7t       0x08000604        0x0 linker stubs
+
+.vfp11_veneer   0x08000604        0x0
+ .vfp11_veneer  0x08000604        0x0 linker stubs
+
+.v4_bx          0x08000604        0x0
+ .v4_bx         0x08000604        0x0 linker stubs
+
+.iplt           0x08000604        0x0
+ .iplt          0x08000604        0x0 main.o
+
+.rel.dyn        0x08000604        0x0
+ .rel.iplt      0x08000604        0x0 main.o
+
+.data           0x20000000        0x4 load address 0x08000604
+                0x20000000                        _sdata = .
+ *(.data)
+ .data          0x20000000        0x1 main.o
+                0x20000000                current_task
+ .data          0x20000001        0x0 led.o
+ .data          0x20000001        0x0 stm32_startup.o
+                0x20000004                        . = ALIGN (0x4)
+ *fill*         0x20000001        0x3 
+                0x20000004                        _edata = .
+
+.igot.plt       0x20000004        0x0 load address 0x08000608
+ .igot.plt      0x20000004        0x0 main.o
+
+.bss            0x20000004       0x54 load address 0x08000608
+                0x20000004                        _sbss = .
+ *(.bss)
+ .bss           0x20000004       0x54 main.o
+                0x20000004                g_tick_count
+                0x20000008                user_tasks
+ .bss           0x20000058        0x0 led.o
+ .bss           0x20000058        0x0 stm32_startup.o
+ *(COMMON)
+                0x20000058                        . = ALIGN (0x4)
+                0x20000058                        _ebss = .
+OUTPUT(final.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x00000000       0x43
+ .comment       0x00000000       0x43 main.o
+                                 0x44 (size before relaxing)
+ .comment       0x00000043       0x44 led.o
+ .comment       0x00000043       0x44 stm32_startup.o
+
+.ARM.attributes
+                0x00000000       0x2e
+ .ARM.attributes
+                0x00000000       0x2e main.o
+ .ARM.attributes
+                0x0000002e       0x2e led.o
+ .ARM.attributes
+                0x0000005c       0x2e stm32_startup.o
